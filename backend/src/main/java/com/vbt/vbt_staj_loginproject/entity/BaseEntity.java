@@ -15,7 +15,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@MappedSuperclass
+@MappedSuperclass  //bu sınıf için tablo oluşturulmaz
+                   //diğer entity sınıfları tarafından miras alınır
 public abstract class BaseEntity {
 
     @Id

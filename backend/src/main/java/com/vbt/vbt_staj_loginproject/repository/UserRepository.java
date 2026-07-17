@@ -10,8 +10,8 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    //Login sirasinda kullanilir: email'den User entity'sine ulasiriz,
-    //sonra sifre hash'ini karsilastiririz.
+    //Login sirasinda kullanılır: emailden User entitysine ulasiriz
+    //sonra şifre hashini karşılaştırırız
     Optional<User> findByEmail(String email);
 
 
