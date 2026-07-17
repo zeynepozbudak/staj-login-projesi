@@ -26,11 +26,11 @@ if (registerForm) {
         const email = document.getElementById('email').value;
         const password = passwordField.value; // Yukarıda tanımladığımız değişkeni kullan
 
-        if (password.length < 6) {
+        if (password.length < 8) {
             Swal.fire({
                 icon: 'error',
                 title: 'Hata!',
-                text: 'Şifreniz en az 6 karakter olmalıdır.'
+                text: 'Şifreniz en az 8 karakter olmalıdır.'
             });
             return;
         }
