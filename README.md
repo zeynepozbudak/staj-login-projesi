@@ -3,7 +3,7 @@
 Bu proje, bir tam yığın (full-stack) web uygulamasının giriş ve kayıt süreçlerini içeren, üniversite stajı kapsamında geliştirilmiş bir çalışmadır.
 
 ## Proje Hakkında
-"The Flower Hub" e-ticaret web uygulaması için geliştirilen bu modül, kullanıcı güvenliğini ve arayüz deneyimini ön planda tutan bir giriş ve kayıt ekranı sunmaktadır.
+"The Login Page" e-ticaret web uygulaması için geliştirilen bu modül, kullanıcı güvenliğini ve arayüz deneyimini ön planda tutan bir giriş ve kayıt ekranı sunmaktadır.
 
 ## Kullanılan Teknolojiler
 

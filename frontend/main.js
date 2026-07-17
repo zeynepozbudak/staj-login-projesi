@@ -35,7 +35,42 @@ if (registerForm) {
             return;
         }
 
-        console.log("Gönderilen Veri:", { firstName, lastName, email, password });
+        // ... (Validasyon kısmı aynı kalacak)
+
+        // ESKİ KOD: console.log("Gönderilen Veri:", { firstName, lastName, email, password });
+        
+        // YENİ KOD: API İsteği
+        fetch('http://localhost:8080/auth/register', { // Meryem ile URL'i teyit et
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                firstName: firstName, 
+                lastName: lastName, 
+                email: email, 
+                password: password 
+            }),
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Kayıt başarısız');
+            return response.json();
+        })
+        .then(data => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Başarılı!',
+                text: 'Hesabınız başarıyla oluşturuldu.'
+            });
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Hata!',
+                text: 'Kayıt sırasında bir sorun oluştu: ' + error.message
+            });
+        });
+// ... (Kodun geri kalanı aynı)
         
         Swal.fire({
             icon: 'success',
