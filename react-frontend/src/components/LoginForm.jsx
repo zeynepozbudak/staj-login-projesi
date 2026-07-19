@@ -57,12 +57,11 @@ const LoginForm = () => {
           <p className="text-blue-100 mb-8 text-lg">Projelerinize erişmek için hemen giriş yapın.</p>
           
           <div className="flex justify-center">
-            {/* Orijinal register.html sayfasındaki havayı veren yeni görsel */}
-            <img 
-              src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" 
-              alt="Giriş İllüstrasyonu" 
-              className="w-full max-w-sm object-contain drop-shadow-2xl transition-transform hover:scale-105 duration-500"
-            />
+          <img 
+  src="https://cdni.iconscout.com/illustration/premium/thumb/sign-up-page-4468582-3783955.png" 
+  alt="Giriş İllüstrasyonu" 
+  className="w-full max-w-sm object-contain drop-shadow-2xl transition-transform hover:scale-105 duration-500"
+/>
           </div>
         </div>
       </div>
