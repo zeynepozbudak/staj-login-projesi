@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -146,7 +147,7 @@ const RegisterForm = () => {
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6 font-medium">
-          Zaten hesabınız var mı? <a href="#" className="text-blue-600 font-bold hover:underline">Giriş Yap</a>
+          Zaten hesabınız var mı? <Link to="/login" className="text-blue-600 font-bold hover:underline">Giriş Yap</Link>
         </p>
       </div>
 
