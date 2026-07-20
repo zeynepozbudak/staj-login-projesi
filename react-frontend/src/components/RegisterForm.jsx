@@ -1,3 +1,4 @@
+import api from '../api';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,31 +22,32 @@ const RegisterForm = () => {
     defaultValues: { firstName: "", lastName: "", email: "", password: "" }
   });
 
-  // 2. Spring Boot 8080 Portu Kayıt (Register) Entegrasyonu
+ // 2. Spring Boot 8080 Portu Kayıt (Register) Entegrasyonu (Axios ile Yeni Hali)
   const onSubmit = async (data) => {
     setServerMessage({ type: '', text: '' });
     
     try {
-      // Backend'deki kayıt olma (register) uç noktası
-      const response = await fetch("http://localhost:8080/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      // Backend'deki kayıt olma (register) uç noktası.
+      // localhost ve JSON çevirme işlemlerini api.js hallediyor.
+      await api.post("/auth/register", data);
 
-      if (response.ok) {
-        setServerMessage({ type: 'success', text: 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...' });
-        // İleride burada Login sayfasına yönlendirme yapılacak
+      // Axios'ta buraya geldiysek işlem başarılı (200 OK) demektir.
+      setServerMessage({ type: 'success', text: 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...' });
+      // İleride burada Login sayfasına yönlendirme yapılacak
+
+    } catch (error) {
+      console.error("Bağlantı veya kayıt hatası:", error);
+      
+      // Axios hataları otomatik ayırdığı için kontrol etmesi çok kolay
+      if (!error.response) {
+        // Backend kapalıysa veya ulaşılamıyorsa
+        setServerMessage({ type: 'error', text: 'Sunucuya bağlanılamadı. Spring Boot (8080) kapalı olabilir.' });
       } else {
+        // Backend hatayı reddettiyse (örn: 400 veya 409 hatası döndüyse)
         setServerMessage({ type: 'error', text: 'Kayıt işlemi başarısız. E-posta kullanımda olabilir.' });
       }
-    } catch (error) {
-      console.error("Bağlantı hatası:", error);
-      setServerMessage({ type: 'error', text: 'Sunucuya bağlanılamadı. Spring Boot (8080) kapalı olabilir.' });
     }
-  };
+  }; 
 
   return (
     <div className="flex w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden min-h-[500px]">

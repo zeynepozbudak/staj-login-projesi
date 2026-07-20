@@ -1,3 +1,4 @@
+import api from '../api';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,30 +19,40 @@ const LoginForm = () => {
     defaultValues: { email: "", password: "" }
   });
 
-  // Spring Boot 8080 Portu Entegrasyonu
+  // Spring Boot 8080 Portu Entegrasyonu (Axios Interceptor ile Yeni Hali)
   const onSubmit = async (data) => {
     setServerMessage({ type: '', text: '' });
     
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include" 
-      });
+      // 1. fetch yerine oluşturduğumuz api nesnesini kullanıyoruz.
+      // baseURL ve credentials ayarları api.js içinde olduğu için burası çok kısaldı.
+      const response = await api.post("/auth/login", data);
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Giriş başarılı! Access Token:", result.token);
-        setServerMessage({ type: 'success', text: 'Giriş başarılı! Sisteme yönlendiriliyorsunuz...' });
+      // 2. Axios, response.json() işlemini otomatik yapar. 
+      //Backend'den gönderilen token'ı response.data içinden alıyoruz.
+      // (Backend'in dönüş ismine göre "token" veya "accessToken" olabilir, ikisini de kontrol ediyoruz)
+      const token = response.data.token || response.data.accessToken;
+      
+      if (token) {
+        // Token'ı localStorage'a kaydediyoruz ki interceptor'ımız otomatik olarak kullanabilsin
+        localStorage.setItem('accessToken', token);
+        console.log("Giriş başarılı! Access Token kaydedildi.");
+      }
+
+      // Başarı mesajı
+      setServerMessage({ type: 'success', text: 'Giriş başarılı! Sisteme yönlendiriliyorsunuz...' });
+
+    } catch (error) {
+      console.error("Bağlantı veya giriş hatası:", error);
+      
+      // Hata Yönetimi: Axios 400, 401, 403 gibi hata kodlarını otomatik catch bloğuna düşürür.
+      if (!error.response) {
+        // Backend'e hiç ulaşılamadıysa (sunucu kapalı vb.)
+        setServerMessage({ type: 'error', text: 'Sunucuya bağlanılamadı. Spring Boot (8080) kapalı olabilir.' });
       } else {
+        // Backend cevap verdi ama giriş başarısız olduysa
         setServerMessage({ type: 'error', text: 'E-posta veya şifre hatalı. Lütfen tekrar deneyin.' });
       }
-    } catch (error) {
-      console.error("Bağlantı hatası:", error);
-      setServerMessage({ type: 'error', text: 'Sunucuya bağlanılamadı. Spring Boot (8080) kapalı olabilir.' });
     }
   };
 
