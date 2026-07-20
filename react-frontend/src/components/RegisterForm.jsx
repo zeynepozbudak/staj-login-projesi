@@ -27,7 +27,7 @@ const RegisterForm = () => {
     
     try {
       // Backend'deki kayıt olma (register) uç noktası
-      const response = await fetch("http://localhost:8080/api/auth/register", {
+      const response = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
