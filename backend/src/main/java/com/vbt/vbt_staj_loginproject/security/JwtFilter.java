@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        //sadece token'ı al
+        //sadece tokenı al
         String token = authHeader.substring(7);
 
         //Token'dan email'i çıkar
@@ -73,5 +73,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath().startsWith("/auth/");
     }
 }

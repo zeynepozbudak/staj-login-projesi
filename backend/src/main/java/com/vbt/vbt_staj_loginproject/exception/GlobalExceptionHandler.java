@@ -42,6 +42,20 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(401, "Email veya şifre hatalı", null, LocalDateTime.now()));
     }
 
+    //Rediste token eşlemesi bulunamadığında
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRefreshToken(InvalidRefreshTokenException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401, ex.getMessage(), null, LocalDateTime.now()));
+    }
+
+    //Jwt bozuk yada expire olduysa
+    @ExceptionHandler(io.jsonwebtoken.JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtException(io.jsonwebtoken.JwtException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401, "Geçersiz veya süresi dolmuş token", null, LocalDateTime.now()));
+    }
+
     // Beklenmeyen hatalar
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {

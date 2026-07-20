@@ -3,9 +3,11 @@ package com.vbt.vbt_staj_loginproject.service;
 import com.vbt.vbt_staj_loginproject.dto.request.LoginRequestDto;
 import com.vbt.vbt_staj_loginproject.dto.request.RegisterRequestDto;
 import com.vbt.vbt_staj_loginproject.dto.response.LoginResponseDto;
+import com.vbt.vbt_staj_loginproject.dto.response.RefreshResponseDto;
 import com.vbt.vbt_staj_loginproject.dto.response.RegisterResponseDto;
 import com.vbt.vbt_staj_loginproject.entity.User;
 import com.vbt.vbt_staj_loginproject.exception.EmailAlreadyExistException;
+import com.vbt.vbt_staj_loginproject.exception.InvalidRefreshTokenException;
 import com.vbt.vbt_staj_loginproject.repository.UserRepository;
 import com.vbt.vbt_staj_loginproject.security.JwtService;
 import com.vbt.vbt_staj_loginproject.security.UserPrincipal;
@@ -15,20 +17,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;  //şifreyi Argon2 ile şifreliycez
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;  // bunu ekle
+    private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
-
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.refreshTokenService = refreshTokenService;
     }
 
     //AuthResult sınıfı register ve login işlemlerinin sonucunu temsil eder
@@ -58,11 +63,12 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         //token üretilir
-        String accessToken = jwtService.generateAccessToken(
-                savedUser.getId(), savedUser.getEmail());
+        String accessToken = jwtService.generateAccessToken(savedUser.getId(), savedUser.getEmail());
 
-        String refreshToken = jwtService.generateRefreshToken(
-                savedUser.getId(), savedUser.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(savedUser.getId(), savedUser.getEmail());
+
+        //refresh token redise kaydedilir
+        refreshTokenService.save(savedUser.getId(), refreshToken);
 
         RegisterResponseDto response = new RegisterResponseDto(
                 savedUser.getId(),
@@ -94,6 +100,9 @@ public class AuthService {
         String accessToken = jwtService.generateAccessToken(user.getId(), user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getId(), user.getEmail());
 
+        //refresh token redise kaydedilir
+        refreshTokenService.save(user.getId(), refreshToken);
+
         LoginResponseDto response = new LoginResponseDto(
                 user.getId(),
                 user.getFirstName(),
@@ -103,5 +112,32 @@ public class AuthService {
         );
 
         return new AuthResult(response, refreshToken);
+    }
+
+    public AuthResult refresh(String refreshToken) {
+        String email = jwtService.extractEmail(refreshToken);
+        UUID userId = jwtService.extractUserId(refreshToken);
+
+        // rediste token geçerlimi
+        if (!refreshTokenService.isValid(userId, refreshToken)) {
+            throw new InvalidRefreshTokenException("Geçersiz veya süresi dolmuş refresh token");
+        }
+
+        //yeni token çifti üretilir
+        String newAccessToken = jwtService.generateAccessToken(userId, email);
+        String newRefreshToken = jwtService.generateRefreshToken(userId, email);
+
+        //yeni refresh token redise kayıt edilir
+        refreshTokenService.save(userId, newRefreshToken);
+
+        RefreshResponseDto response = new RefreshResponseDto(newAccessToken);
+        return new AuthResult(response, newRefreshToken);
+    }
+
+    //tokendan userId çıkarılarak Redisten refresh token silinir
+    public void logout(String refreshToken) {
+        UUID userId = jwtService.extractUserId(refreshToken);
+
+        refreshTokenService.delete(userId);
     }
 }
