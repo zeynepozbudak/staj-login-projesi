@@ -5,9 +5,11 @@ spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:vbt_login_db}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:login1234}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -23,7 +25,7 @@ spring:
       timeout: 5000ms
 
 jwt:
-  secret: ${JWT_SECRET:sSvhRTo1g9WoO8uOtNRtA7r1VOVStxcqBeN6ZkAxxS3}
+  secret: ${JWT_SECRET:default-jwt-secret-degistirin}
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
 
