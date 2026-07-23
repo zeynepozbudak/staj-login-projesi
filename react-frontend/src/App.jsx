@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import Dashboard from './components/Dashboard'; // Yeni sayfamızı import ettik
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           
           {/* /register adresinde RegisterForm bileşenini göster */}
           <Route path="/register" element={<RegisterForm />} />
+
+          {/* /dashboard adresinde yeni Dashboard bileşenini göster */}
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </BrowserRouter>

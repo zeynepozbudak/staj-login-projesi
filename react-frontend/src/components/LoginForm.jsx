@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -13,7 +14,7 @@ const loginSchema = z.object({
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [serverMessage, setServerMessage] = useState({ type: '', text: '' });
-
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" }
@@ -42,6 +43,10 @@ const LoginForm = () => {
       // Başarı mesajı
       setServerMessage({ type: 'success', text: 'Giriş başarılı! Sisteme yönlendiriliyorsunuz...' });
 
+      setTimeout(() => {
+      navigate('/dashboard');
+      }, 1500);
+      
     } catch (error) {
       console.error("Bağlantı veya giriş hatası:", error);
       
