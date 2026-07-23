@@ -15,11 +15,17 @@ spring:
       hibernate:
         format_sql: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+
 jwt:
   secret: ${JWT_SECRET:sSvhRTo1g9WoO8uOtNRtA7r1VOVStxcqBeN6ZkAxxS3}
-  access-token-expiration: 900000       # 15 dakika
-  refresh-token-expiration: 604800000   # 7 gun
-
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
 
 server:
   port: ${SERVER_PORT:8080}
@@ -30,15 +36,14 @@ logging:
     org.hibernate.type.descriptor: TRACE
     com.vbt.vbt_staj_loginproject: DEBUG
 
-
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health, info, prometheus, metrics
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: always
 
 springdoc:
   api-docs:
@@ -46,10 +51,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
-
-data:
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    password: ${REDIS_PASSWORD:}
-    timeout: 5000ms
