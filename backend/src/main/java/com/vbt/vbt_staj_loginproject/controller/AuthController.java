@@ -7,19 +7,21 @@ import com.vbt.vbt_staj_loginproject.dto.response.RefreshResponseDto;
 import com.vbt.vbt_staj_loginproject.dto.response.RegisterResponseDto;
 import com.vbt.vbt_staj_loginproject.exception.InvalidRefreshTokenException;
 import com.vbt.vbt_staj_loginproject.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Kimlik dogrulama islemleri (kayit, giris, token yenileme, cikis)")
 public class AuthController {
 
     private final AuthService authService;
@@ -29,6 +31,12 @@ public class AuthController {
     }
 
     //yeni kullanıcı kaydı oluşur, refresh token cookie ye yazılır
+    @Operation(summary = "Yeni kullanici kaydi", description = "Email ve sifre ile yeni kullanici olusturur. Basarili kayit sonrasi access token döner ve refresh token httpOnly cookie'ye yazilir.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Kayit basarili"),
+            @ApiResponse(responseCode = "400", description = "Validasyon hatasi (eksik/hatali alan)"),
+            @ApiResponse(responseCode = "409", description = "Bu email zaten kayitli")
+    })
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDto> register(@Valid @RequestBody RegisterRequestDto request,
                                                         HttpServletResponse httpResponse) {
@@ -38,6 +46,11 @@ public class AuthController {
     }
 
     // kullanıcı giriş yapar, refresh token cookie ye yazılır
+    @Operation(summary = "Kullanici girisi", description = "Email ve sifre ile giris yapar. Basarili giris sonrasi access token döner ve refresh token httpOnly cookie'ye yazilir.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Giris basarili"),
+            @ApiResponse(responseCode = "401", description = "Email veya sifre hatali")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request,
                                                   HttpServletResponse httpResponse) {
@@ -47,6 +60,11 @@ public class AuthController {
     }
 
     // refresh token ile yeni access token alır, refresh token cookie ye yazılır
+    @Operation(summary = "Token yenileme", description = "Cookie'deki refresh token ile yeni access token ve refresh token alir. Eski refresh token gecersiz olur (token rotation).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Token yenileme basarili"),
+            @ApiResponse(responseCode = "401", description = "Refresh token gecersiz veya suresi dolmus")
+    })
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponseDto> refresh(HttpServletRequest request, HttpServletResponse httpResponse) {
         String refreshToken = extractRefreshTokenFromCookie(request);
@@ -60,6 +78,10 @@ public class AuthController {
     }
 
     // kullanıcı çıkış yapar, refresh token cookie silinir
+    @Operation(summary = "Kullanici cikisi", description = "Refresh token'i Redis'ten siler ve cookie'yi temizler. Kullanici tekrar giris yapmak zorunda kalir.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cikis basarili")
+    })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse httpResponse) {
         String refreshToken = extractRefreshTokenFromCookie(request);
