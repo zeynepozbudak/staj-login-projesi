@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { Link } from 'react-router-dom';
@@ -14,6 +15,21 @@ const loginSchema = z.object({
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [serverMessage, setServerMessage] = useState({ type: '', text: '' });
+  const [countdown, setCountdown] = useState(0);
+  const isLocked = countdown > 0;
+
+  useEffect(() => {
+    let timer;
+    // Eğer countdown 0'dan büyükse her saniye 1 azalt
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    // Bileşen ekrandan kalkarsa veya süre biterse sayacı temizle
+    return () => clearInterval(timer);
+  }, [countdown]);
+  
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema),
@@ -50,12 +66,13 @@ const LoginForm = () => {
     } catch (error) {
       console.error("Bağlantı veya giriş hatası:", error);
       
-      // Hata Yönetimi: Axios 400, 401, 403 gibi hata kodlarını otomatik catch bloğuna düşürür.
       if (!error.response) {
-        // Backend'e hiç ulaşılamadıysa (sunucu kapalı vb.)
         setServerMessage({ type: 'error', text: 'Sunucuya bağlanılamadı. Spring Boot (8080) kapalı olabilir.' });
+      } else if (error.response.status === 429) {
+        // YENİ EKLENEN: 429 Hatası Yakalandı!
+        setCountdown(60); // Sayacı 60 saniyeye kur
+        setServerMessage({ type: 'error', text: 'Çok fazla hatalı giriş yaptınız. Güvenlik nedeniyle kilitlendi.' });
       } else {
-        // Backend cevap verdi ama giriş başarısız olduysa
         setServerMessage({ type: 'error', text: 'E-posta veya şifre hatalı. Lütfen tekrar deneyin.' });
       }
     }
@@ -132,12 +149,16 @@ const LoginForm = () => {
             </div>
           )}
 
-          {/* Buton */}
+          {/* Güncellenen Buton */}
           <button 
             type="submit" 
-            className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-300 mt-4 cursor-pointer shadow-lg shadow-blue-600/30"
+            disabled={isLocked}
+            className={`w-full font-bold py-3 rounded-lg transition duration-300 mt-4 text-white
+              ${isLocked 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-600 hover:bg-blue-700 cursor-pointer shadow-lg shadow-blue-600/30'}`}
           >
-            Giriş Yap
+            {isLocked ? `Lütfen ${countdown} saniye bekleyin` : 'Giriş Yap'}
           </button>
         </form>
 
