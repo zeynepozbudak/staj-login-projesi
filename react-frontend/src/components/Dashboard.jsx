@@ -42,7 +42,7 @@ const handleLogout = () => {
       <div className="bg-white p-10 md:p-16 rounded-2xl shadow-xl text-center max-w-lg w-full">
         
         <h1 className="text-center text-base md:text-lg font-medium text-gray-600 tracking-wide mb-5 whitespace-nowrap overflow-hidden text-ellipsis">
-        Hoşgeldiniz <span className="font-semibold">{fullName ? fullName.toLocaleUpperCase('tr-TR') : ''}</span>!
+        Hoş geldiniz <span className="font-semibold">{fullName ? fullName.toLocaleUpperCase('tr-TR') : ''}</span>!
         </h1>
         
         <p className="text-gray-500 mb-8">
