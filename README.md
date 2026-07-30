@@ -191,35 +191,12 @@ frontend/
 - Şifre göster/gizle toggle
 - SweetAlert2 ile şık bildirimler
 
----
-
-## Ekran Görüntüleri İçin Önerilen Yerler
-
-> Aşağıdaki ekran görüntüleri README'ye eklenmelidir.
-
-1. **Giriş Sayfası** — `http://localhost:5173/login` adresinin tam ekran görüntüsü. Sol tarafta mavi alan ve illüstrasyon, sağ tarafta giriş formu görünmelidir.
-2. **Giriş — Validasyon Hataları** — Email ve şifre alanlarını boş bırakıp submit ettiğinizde görünen Zod validasyon mesajları (kırmızı yazılar).
-3. **Giriş — Başarılı Giriş Mesajı** — Doğru bilgilerle giriş yapıldığında görünen yeşil "Giriş başarılı! Sisteme yönlendiriliyorsunuz..." mesajı.
-4. **Giriş — Hatalı Bilgi Mesajı** — Yanlış şifre girildiğinde görünen kırmızı hata mesajı.
-5. **Giriş — Rate Limit Kilidi** — 5'ten fazla hatalı giriş denemesinden sonra butonun devre dışı kalması ve "Lütfen 60 saniye bekleyin" geri sayımı.
-6. **Kayıt Sayfası** — `http://localhost:5173/register` adresinin tam ekran görüntüsü. Ad, soyad, email, şifre alanları görünmelidir.
-7. **Kayıt — Başarılı Kayıt Mesajı** — Başarılı kayıt sonrası görünen yeşil mesaj.
-8. **Kayıt — Email Çakışması Hatası** — Zaten kayıtlı bir email ile kayıt olunmaya çalışıldığında görünen kırmızı hata mesajı.
-9. **Dashboard Sayfası** — `http://localhost:5173/dashboard` adresinin tam ekran görüntüsü. "Hoş geldiniz [AD SOYAD]!" mesajı ve çıkış butonu görünmelidir.
-10. **Dashboard — Yükleniyor Durumu** — Dashboard verisi yüklenirken görünen mavi arka planlı "Yükleniyor..." animasyonu.
-11. **Mobil Görünüm (Responsive)** — Login veya register sayfasının dar ekran (mobil) görünümü. Sol taraftaki mavi alanın gizlendiğini gösterir.
-12. **Playwright Test Sonuçları** — `npx playwright test` komutunun terminal çıktısı (testlerin geçtiğini gösteren).
 ## Yapay Zeka Entegrasyonu (AI Agents & Skills)
 
 Projenin geliştirme sürecini hızlandırmak, tekrarlayan (boilerplate) işleri otomatize etmek ve kod standartlarını korumak amacıyla sisteme yapay zeka asistan kuralları (AI Skills/Agents) entegre edilmiştir.
 
 * **Frontend Kuralı (`.claude/skills/component.md`):** Proje dizininde oluşturulan bu kural dosyası sayesinde, yapay zekaya `/component` komutu verildiğinde projeye özel standartlarda (Tailwind CSS, Zod validasyonları, React Hook Form ve Axios mimarisine uygun) yeni React bileşenleri üretmesi sağlanmıştır.
 * Bu entegrasyon sayesinde arayüz geliştirme süreçlerindeki angarya iş yükü minimize edilmiş ve proje teslim süresi verimli kullanılmıştır.
-
-
-
-
-
 
 # VBT Staj Projesi — Backend (Spring Boot)
 
