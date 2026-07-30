@@ -219,6 +219,8 @@ Projenin geliştirme sürecini hızlandırmak, tekrarlayan (boilerplate) işleri
 
 
 
+
+
 # VBT Staj Projesi — Backend (Spring Boot)
 
 ## Proje Hakkında
