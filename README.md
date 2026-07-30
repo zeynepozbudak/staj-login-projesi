@@ -310,7 +310,7 @@ backend/
 
 ## API Endpoint'leri
 
-![Swagger UI Ana Sayfa](screenshots/01-swagger-ana-sayfa.png)
+![Swagger UI Ana Sayfa](backend/screenshots/01-swagger-ana-sayfa.png)
 
 ### Authentication (`/auth`)
 
@@ -321,9 +321,9 @@ backend/
 | `POST` | `/auth/refresh` | Token yenileme (Cookie'den) | — (Cookie otomatik gönderilir) | `200` — accessToken |
 | `POST` | `/auth/logout` | Kullanıcı çıkışı | — (Cookie otomatik gönderilir) | `200` — Boş yanıt |
 
-![Swagger — Register Endpoint Detayı](screenshots/02-swagger-register-endpoint.png)
+![Swagger — Register Endpoint Detayı](backend/screenshots/02-swagger-register-endpoint.png)
 
-![Swagger — Login Endpoint Detayı](screenshots/03-swagger-login-endpoint.png)
+![Swagger — Login Endpoint Detayı](backend/screenshots/03-swagger-login-endpoint.png)
 
 ### User (`/users`) — *Yetkilendirme gerektirir (Bearer Token)*
 
@@ -345,19 +345,19 @@ backend/
 
 **Başarılı Kayıt (201 Created):**
 
-![Başarılı Register — 201 Created](screenshots/04-register-basarili-201.png)
+![Başarılı Register — 201 Created](backend/screenshots/04-register-basarili-201.png)
 
 **Başarılı Giriş (200 OK):**
 
-![Başarılı Login — 200 OK](screenshots/05-login-basarili-200.png)
+![Başarılı Login — 200 OK](backend/screenshots/05-login-basarili-200.png)
 
 **Email Çakışması (409 Conflict):**
 
-![409 Conflict — Email Zaten Kayıtlı](screenshots/06-conflict-409.png)
+![409 Conflict — Email Zaten Kayıtlı](backend/screenshots/06-conflict-409.png)
 
 **Rate Limit Aşımı (429 Too Many Requests):**
 
-![429 Rate Limit — Çok Fazla İstek](screenshots/07-rate-limit-429.png)
+![429 Rate Limit — Çok Fazla İstek](backend/screenshots/07-rate-limit-429.png)
 
 ### Hata Yanıtları
 
@@ -392,13 +392,13 @@ Hata yanıt formatı:
 
 ### Veritabanı Görünümü
 
-![PostgreSQL — Users Tablosu (Argon2 Hash)](screenshots/12-postgresql-users-tablosu.png)
+![PostgreSQL — Users Tablosu (Argon2 Hash)](backend/screenshots/12-postgresql-users-tablosu.png)
 
 > Şifreler Argon2 algoritmasıyla hashlenmiş olarak saklanır. Düz metin şifre veritabanında hiçbir zaman tutulmaz.
 
 ### Redis Token Görünümü
 
-![Redis — Refresh Token (TTL ile)](screenshots/13-redis-refresh-token.png)
+![Redis — Refresh Token (TTL ile)](backend/screenshots/13-redis-refresh-token.png)
 
 > Refresh token'lar Redis'te `refresh:<userId>` key'i altında 7 gün TTL ile saklanır.
 
@@ -416,7 +416,7 @@ Hata yanıt formatı:
 
 Prometheus metrikleri Grafana üzerinden görselleştirilmektedir. Dashboard'a `http://localhost:3000` adresinden erişilebilir (varsayılan kullanıcı: `admin`, şifre: `admin123`).
 
-![Grafana — Spring Boot Dashboard](screenshots/08-grafana-dashboard.png)
+![Grafana — Spring Boot Dashboard](backend/screenshots/08-grafana-dashboard.png)
 
 ## Kurulum ve Çalıştırma
 
@@ -466,7 +466,7 @@ docker-compose up -d
 
 Bu komut PostgreSQL, Redis, Prometheus ve Grafana'yı ayağa kaldırır.
 
-![Docker Compose Servisleri](screenshots/11-docker-compose-ps.png)
+![Docker Compose Servisleri](backend/screenshots/11-docker-compose-ps.png)
 
 ### 4. Uygulamayı Çalıştırma
 
@@ -516,11 +516,11 @@ k6 run load-test.js
 
 ### Test Sonuçları
 
-![Test Sonuçları — Tüm Testler Başarılı](screenshots/09-test-sonuclari.png)
+![Test Sonuçları — Tüm Testler Başarılı](backend/screenshots/09-test-sonuclari.png)
 
 ### Yük Testi Sonuçları (k6)
 
-![k6 Yük Testi Sonuçları](screenshots/10-k6-yuk-testi.png)
+![k6 Yük Testi Sonuçları](backend/screenshots/10-k6-yuk-testi.png)
 
 ## Ortam Değişkenleri
 
