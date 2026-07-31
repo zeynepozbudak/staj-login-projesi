@@ -197,7 +197,9 @@ Projenin geliştirme sürecini hızlandırmak, tekrarlayan (boilerplate) işleri
 
 * **Frontend Kuralı (`.claude/skills/component.md`):** Proje dizininde oluşturulan bu kural dosyası sayesinde, yapay zekaya `/component` komutu verildiğinde projeye özel standartlarda (Tailwind CSS, Zod validasyonları, React Hook Form ve Axios mimarisine uygun) yeni React bileşenleri üretmesi sağlanmıştır.
 * Bu entegrasyon sayesinde arayüz geliştirme süreçlerindeki angarya iş yükü minimize edilmiş ve proje teslim süresi verimli kullanılmıştır.
-
+  
+  <br>
+  
 # VBT Staj Projesi — Backend (Spring Boot)
 
 ## Proje Hakkında
